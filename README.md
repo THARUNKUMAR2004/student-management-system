@@ -106,9 +106,8 @@ student-management-system/
 
 ## 👤 Author
 
-**Malaya Nayak**
-- GitHub: [@MalayaNayak2002](https://github.com/MalayaNayak2002)
-- LinkedIn: [malaya-nayak](https://www.linkedin.com/in/malaya-nayak)
+**tharun kumar**
+ 
 
 ## 📝 License
 
