@@ -1,59 +1,38 @@
-import { useState } from 'react'
-import Layout from './components/Layout.jsx'
-import Login from './pages/Login.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import Students from './pages/Students.jsx'
-import StudentProfile from './pages/StudentProfile.jsx'
-import Attendance from './pages/Attendance.jsx'
-import Marks from './pages/Marks.jsx'
-import AdminPanel from './pages/AdminPanel.jsx'
-import './App.css'
+import { useState } from "react";
+import Sidebar from "./components/Sidebar.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Employees from "./pages/Employees.jsx";
+import EmployeeProfile from "./pages/EmployeeProfile.jsx";
+import EmployeeForm from "./pages/EmployeeForm.jsx";
+import "./App.css";
 
+// Simple state-based navigation (no router library needed)
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    sessionStorage.getItem('sms_logged_in') === 'true'
-  )
-  const [currentPage, setCurrentPage] = useState(
-    sessionStorage.getItem('sms_page') || 'dashboard'
-  )
+  const [page, setPage] = useState("dashboard");
+  const [selectedId, setSelectedId] = useState(null);
 
-  const handleLogin = () => {
-    sessionStorage.setItem('sms_logged_in', 'true')
-    sessionStorage.setItem('sms_page', 'dashboard')
-    setIsLoggedIn(true)
-    setCurrentPage('dashboard')
-  }
-
-  const handleLogout = () => {
-    sessionStorage.removeItem('sms_logged_in')
-    sessionStorage.removeItem('sms_page')
-    setIsLoggedIn(false)
-    setCurrentPage('dashboard')
-  }
-
-  const handleNavigate = (page) => {
-    sessionStorage.setItem('sms_page', page)
-    setCurrentPage(page)
-  }
-
-  if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />
-  }
+  const navigate = (nextPage, id = null) => {
+    setPage(nextPage);
+    setSelectedId(id);
+  };
 
   return (
-    <Layout
-      currentPage={currentPage}
-      onNavigate={handleNavigate}
-      onLogout={handleLogout}
-    >
-      {currentPage === 'dashboard' && <Dashboard onNavigate={handleNavigate} />}
-      {currentPage === 'students' && <Students />}
-      {currentPage === 'profile' && <StudentProfile />}
-      {currentPage === 'attendance' && <Attendance />}
-      {currentPage === 'marks' && <Marks />}
-      {currentPage === 'admin' && <AdminPanel />}
-    </Layout>
-  )
+    <div className="layout">
+      <Sidebar currentPage={page} onNavigate={navigate} />
+
+      <main className="content">
+        {page === "dashboard" && <Dashboard onNavigate={navigate} />}
+        {page === "employees" && <Employees onNavigate={navigate} />}
+        {page === "profile" && (
+          <EmployeeProfile employeeId={selectedId} onNavigate={navigate} />
+        )}
+        {page === "add" && <EmployeeForm onNavigate={navigate} />}
+        {page === "edit" && (
+          <EmployeeForm key={selectedId} employeeId={selectedId} onNavigate={navigate} />
+        )}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
