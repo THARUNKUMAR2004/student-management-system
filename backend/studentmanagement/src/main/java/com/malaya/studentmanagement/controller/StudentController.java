@@ -1,12 +1,14 @@
 package com.malaya.studentmanagement.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.malaya.studentmanagement.model.Student;
 import com.malaya.studentmanagement.service.StudentService;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
@@ -24,7 +26,7 @@ public class StudentController {
 
     // POST - create a new student
     @PostMapping
-    public Student addStudent(@RequestBody Student student) {
+    public Student addStudent(@Valid @RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
@@ -36,7 +38,10 @@ public class StudentController {
 
     // PUT - update a student
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
+    public Student updateStudent(
+            @PathVariable Long id,
+            @Valid @RequestBody Student studentDetails) {
+
         return studentService.updateStudent(id, studentDetails);
     }
 
@@ -45,5 +50,4 @@ public class StudentController {
     public void deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
     }
-
 }
